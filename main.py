@@ -1,5 +1,5 @@
-'''
-#Класс Книга
+
+'''#Класс Книга
 class Book:
     def __init__(self, title, author, year):
         self.title = title
@@ -10,8 +10,8 @@ class Book:
 book = Book("1984", "Джордж Оруэлл",1949)
 print(book.get_info()) 
 '''
-'''
-#Класс Студент
+
+'''#Класс Студент
 class Student: #класс студент
     def __init__(self, name,age,grades):
         self.name = name
@@ -243,8 +243,8 @@ print(counter.value)
 
 counter.reset()
 print(counter.value)'''
-'''
-#6 Класс Point 
+
+'''#6 Класс Point 
 class Point:
     def __init__(self,x,y):
         self.x=x
@@ -405,7 +405,7 @@ print(warehouse.total_value())  # 7*10 + 3*15 = 115
 warehouse.remove_product("Яблоки", 4)  # останется 3 яблока
 print(warehouse.total_value())'''
 
-#2  Библиотека книг (композиция + поиск)
+'''#2  Библиотека книг (композиция + поиск)
 class Book ():
     def __init__(self,title,author,year,is_available=True):
         self.title=title
@@ -476,4 +476,213 @@ lib.borrow("Война и мир")          # выдаст книгу
 lib.borrow("Война и мир")          # скажет, что уже выдана
 lib.return_book("Война и мир")     # вернёт
 lib.return_book("Война и мир")     # скажет, что и так доступна
-lib.borrow("Идиот")                # книги нет в библиотеке
+lib.borrow("Идиот")                # книги нет в библиотеке'''
+
+'''#3 Фигуры: площадь и периметр (наследование + полиморфизм)
+class Shape :
+    def __init__(self):
+        pass
+    def area(self):
+        return 0
+    def perimeter(self):
+        return 0
+class Rectangle (Shape ): # прямоугольник
+    def __init__(self,height,length ):
+        self.height=height
+        self.length =length 
+    def area(self):
+        return self.height*self.length
+    def perimeter(self):
+        return (self.height+self.length)*2
+class Circle  (Shape): #круг
+    def __init__(self,radius):
+        self.radius=radius
+    def area(self):
+        return 3.14*self.radius**2
+    def perimeter(self):
+        return 2*3.14*self.radius
+class Triangle  (Shape): #треугольник
+    def __init__(self,height,base ):
+        self.height=height
+        self.base=base 
+    def area(self):
+        return self.height*self.base /2
+    def perimeter(self):
+        return self.base+2*(((self.base/2))**2+self.height**2)**(1/2)   
+class Square(Rectangle):
+    def __init__(self,side ):
+        self.side=side    
+        super().__init__(side, side)
+
+shapes = [Rectangle(5, 3), Circle(4), Triangle(6, 4),Square(6)]
+for shape in shapes:
+    print(shape.area(),' ',shape.perimeter())'''
+
+'''#Переопределение методов Банковский счет
+class Account: #класс Банковский счет
+    interest_rate=0.03
+    def __init__(self,owner,balance):
+        self.owner = owner
+        self.balance = balance
+    def deposit(self,amount): #добавление денег
+        self.balance+=amount
+    def withdraw(self, amount): #снятие денег
+        if self.balance >= amount:
+            self.balance-=amount
+        else:
+            print("Недостаточно средств") 
+    def get_balance(self): #информация о балансе
+        return self.balance  
+    def add_interest(self): #информация о балансе
+        self.balance=self.balance*(1+self.interest_rate)   
+        return self.balance    
+class SavingsAccount(Account): #класс Банковский счет
+    interest_rate=0.05
+    def add_interest(self): #информация о балансе
+        self.balance=self.balance*(1+self.interest_rate)
+        return self.balance
+class CheckingAccount (Account):
+    def __init__(self,owner, balance,commission):
+        super().__init__(owner, balance)
+        self.commission = commission
+    def withdraw(self, amount):
+        total = amount + self.commission
+        if self.balance >= total:
+            self.balance -= total
+        else:
+            print("Недостаточно средств") 
+
+
+# Пример использования
+acc = Account("Иван", 1000)
+sav = SavingsAccount("Мария", 1000)
+chk = CheckingAccount("Алексей", 1000, 1)
+
+acc.deposit(500)
+acc.withdraw(200)
+acc.add_interest()
+
+sav.deposit(300)
+sav.withdraw(100)
+sav.add_interest()
+
+chk.deposit(400)
+chk.withdraw(200)
+
+print("Обычный счёт:", acc.get_balance())
+print("Накопительный счёт:", sav.get_balance())
+print("Расчетный счёт:", chk.get_balance())'''
+
+'''#Задача 5. Меню ресторана и заказ (композиция + магические методы)
+class MenuItem:
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
+class Order:
+    def __init__(self):
+        self.items = {}  # словарь: название блюда -> количество
+        self.menu = {}   # словарь: название блюда -> объект MenuItem
+    def add_item(self, item, quantity):
+        if item.name in self.items:
+            self.items[item.name] += quantity
+        else:
+            self.items[item.name] = quantity
+        self.menu[item.name] = item  # сохраняем объект MenuItem
+    def total(self):
+        total_price = 0
+        for item_name, quantity in self.items.items():
+            price = self.menu[item_name].price
+            total_price += quantity * price
+        return total_price
+    def __str__(self):
+        lines = []
+        for item_name, quantity in self.items.items():
+            price = self.menu[item_name].price
+            lines.append(f"{item_name} — {quantity} — {quantity * price}")
+        lines.append(f"Итого: {self.total()}")
+        return "\n".join(lines)
+    def __len__(self):
+        return len(self.items)
+
+# Пример использования
+pizza = MenuItem("Пицца", 500)
+salad = MenuItem("Салат", 200)
+drink = MenuItem("Напиток", 100)
+
+order = Order()
+order.add_item(pizza, 2)
+order.add_item(salad, 1)
+order.add_item(drink, 3)
+
+print(order)
+print("Количество разных позиций:", len(order))'''
+
+#Задача 6. Система задач (ToDo) с приоритетами (инкапсуляция + сортировка)
+class Task:
+    def __init__(self, title, priority):
+        self.__title = title
+        self.__priority = priority
+
+    @property
+    def priority(self):
+        return self.__priority
+
+    @priority.setter
+    def priority(self, value):
+        if 1 <= value <= 3:
+            self.__priority = value
+        else:
+            raise ValueError("Приоритет должен быть от 1 до 3")
+
+    def __str__(self):
+        return f"Задача: {self.__title}, приоритет: {self.__priority}"
+
+class TaskManager:
+    def __init__(self):
+        self.tasks = []
+
+    def add_task(self, task):
+        self.tasks.append(task)
+
+    def get_tasks_by_priority(self, priority):
+        return [task for task in self.tasks if task.priority == priority]
+
+    def remove_task(self, title):
+        for task in self.tasks:
+            if task._Task__title == title:
+                self.tasks.remove(task)
+                return
+        print(f"Задача '{title}' не найдена")
+
+    def __len__(self):
+        return len(self.tasks)
+
+
+# Тестовые данные
+task1 = Task("Сделать домашку", 1)
+task2 = Task("Купить продукты", 2)
+task3 = Task("Сходить на пробежку", 3)
+task4 = Task("Позвонить маме", 1)
+task5 = Task("Проверить почту", 2)
+
+# Создаём менеджер задач
+manager = TaskManager()
+
+# Добавляем тестовые задачи
+manager.add_task(task1)
+manager.add_task(task2)
+manager.add_task(task3)
+manager.add_task(task4)
+manager.add_task(task5)
+
+# Выводим отсортированный список задач по приоритету
+for priority in [1, 2, 3]:
+    print(f"Приоритет {priority}:")
+    for task in manager.get_tasks_by_priority(priority):
+        print(task)
+
+# Удаляем одну задачу
+manager.remove_task("Проверить почту")
+
+# Выводим количество задач
+print(f"Всего задач: {len(manager)}")
