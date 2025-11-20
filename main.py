@@ -181,7 +181,7 @@ checking = CheckingAccount("67890", 1000, 2)
 checking.apply_fee(100)
 print(checking.get_balance())  # Выведет: 898.0'''
 
-#Переопределения методов (Транспорт)
+'''#Переопределения методов (Транспорт)
 class Vehicle:
     def move(self):
         print("Vehicle is moving")
@@ -195,6 +195,7 @@ class Bicycle   (Vehicle):
         pass
     def move(self):
         print("Bicycle is riding")
+        
 class Boat  (Vehicle):
     def __init__(self):
         pass
@@ -202,4 +203,143 @@ class Boat  (Vehicle):
         print("Boat is sailing")
 vehicles = [Car(), Bicycle(), Boat()]
 for vehicle in vehicles:
-    vehicle.move()
+    vehicle.move()'''
+
+'''#1 Класс кот 
+class Cat:
+    def __init__(self,name,age):
+        self.name=name
+        self.age=age
+    def meow(self):
+        print(f"Мяу! Я кот {self.name}. Мне {self.age} года")
+cat1 = Cat("Вася",  5)
+cat2=Cat("Снежок",  3)
+cat1.meow()
+cat2.meow()'''
+
+'''#2 Класс Круг 
+class Circle:
+    def __init__(self,radius):
+        self.radius=radius
+    def area(self):
+        print(self.radius**2*3.14)  # площадь
+circle = Circle(5)
+circle.area()'''
+
+'''#3 Класс Счетчик 
+class Counter:
+    def __init__(self,value):
+        self.value=value
+        value=0
+    def inc(self):
+        self.value+=1
+    def reset(self):
+        self.value=0
+
+counter = Counter(0)
+counter.inc()
+counter.inc()
+print(counter.value)
+
+counter.reset()
+print(counter.value)'''
+'''
+#6 Класс Point 
+class Point:
+    def __init__(self,x,y):
+        self.x=x
+        self.y=y
+    def __str__(self):
+        return f"Point(x={self.x}, y={self.y})"
+point1=Point(1,2)
+point2=Point(5,7)
+
+print(point1)
+print(point2)'''
+
+'''#7 Класс Rectangle 
+class Rectangle:
+    def __init__(self, width, height):
+        self.width=width
+        self.height=height
+    def area(self):
+        print(self.height*self.width)
+    def perimeter(self):
+        print((self.height+self.width)*2)
+Rectangle1=Rectangle(1,2)
+Rectangle2=Rectangle(5,7)
+
+Rectangle1.area()
+Rectangle1.perimeter()
+Rectangle2.area()
+Rectangle2.perimeter()'''
+
+'''#11 Класс Temperature 
+class Temperature:
+    def __init__(self, celsius):
+        self.celsius=celsius
+    def to_fahrenheit(self):
+        print( self.celsius*9/5+32) 
+    def is_freezing(self):
+        if self.celsius>0:
+            return True
+        else:
+            return False
+
+temperature=Temperature(25)
+temperature.to_fahrenheit()
+print(temperature.is_freezing())'''
+
+'''#11 Класс Vector2D 
+class Vector2D :
+    def __init__(self,x,y):
+        self.x=x
+        self.y=y
+    def add(self,other):
+        # возвращаем НОВЫЙ вектор — сумму текущего и другого
+        return Vector2D(self.x + other.x, self.y + other.y)
+    def length(self):
+        return   (self.x**2+self.y**2)**0.5
+
+v1 = Vector2D(5, 7)
+v2 = Vector2D(2, 3)
+
+v3 = v1.add(v2)          # новый вектор (7, 10)
+print(v3.x, v3.y)        # 7 10
+print(v3.length())       # длина вектора'''
+
+#13 Наследование: «Работник» и «Менеджер»:
+class Employee ():
+    def __init__(self, name, salary):
+        self.name=name
+        self.salary=salary
+    def info(self):
+        print(f"Имя: {self.name}. зарплата: {self.salary} ")
+class Manager(Employee):
+    def __init__(self, name, salary, team_size):
+        super().__init__(name, salary)
+        self.team_size=team_size
+    def info(self):
+        print(f"Имя: {self.name}. зарплата: {self.salary} , размер команды: {self.team_size} человек")
+employee=Employee("Alex",50)    
+manager =Manager ("Ivan",70,5)      
+employee.info()
+manager.info() 
+
+#14 Класс с общим счётчиком объектов»:
+class Employee ():
+    def __init__(self, name, salary):
+        self.name=name
+        self.salary=salary
+    def info(self):
+        print(f"Имя: {self.name}. зарплата: {self.salary} ")
+class Manager(Employee):
+    def __init__(self, name, salary, team_size):
+        super().__init__(name, salary)
+        self.team_size=team_size
+    def info(self):
+        print(f"Имя: {self.name}. зарплата: {self.salary} , размер команды: {self.team_size} человек")
+employee=Employee("Alex",50)    
+manager =Manager ("Ivan",70,5)      
+employee.info()
+manager.info() 
