@@ -308,7 +308,7 @@ v3 = v1.add(v2)          # новый вектор (7, 10)
 print(v3.x, v3.y)        # 7 10
 print(v3.length())       # длина вектора'''
 
-#13 Наследование: «Работник» и «Менеджер»:
+'''#13 Наследование: «Работник» и «Менеджер»:
 class Employee ():
     def __init__(self, name, salary):
         self.name=name
@@ -342,4 +342,138 @@ class Manager(Employee):
 employee=Employee("Alex",50)    
 manager =Manager ("Ivan",70,5)      
 employee.info()
-manager.info() 
+manager.info() '''
+
+'''#1  Склад товаров (композиция + классы)
+class Product ():
+    def __init__(self,name,price,quantity):
+        self.name=name
+        self.price=price
+        self.quantity=quantity
+    def as_row(self, index):
+        """Вернёт одну строку таблицы с данными товара."""
+        return f"{index:2} | {self.name:11} | {self.price:4} | {self.quantity:9}"
+
+class Warehouse:
+    def __init__ (self):
+        self.products={}
+    def add_product(self,product):
+        name = product.name
+        if name in self.products:
+            self.products[name].quantity+=product.quantity
+
+        else:
+            self.products[name] = product
+    def remove_product(self, name, quantity):
+        if name not in self.products:
+            raise ValueError("Товара с таким именем нет на складе")
+        if self.products[name].quantity < quantity:
+            raise ValueError("Недостаточно товара на складе")
+        self.products[name].quantity -= quantity      
+    def total_value(self):
+        total = 0
+        for product in self.products.values():
+            total += product.price * product.quantity
+        return total
+    def print_table(self):
+        print("№ | Наименование | Цена | Количество")
+        print("--+-------------+------+-----------")
+        count = 1
+        for product in self.products.values():
+            print(product.as_row(count))
+            count += 1
+    def find_product(self,name):
+        return self.products.get(name)
+
+
+warehouse = Warehouse()
+
+p1 = Product("Яблоки", 10, 5)   # 5 штук по 10
+p2 = Product("Груши", 15, 3)    # 3 штуки по 15
+p3 = Product("Яблоки", 10, 2)   # ещё 2 яблока
+
+warehouse.add_product(p1)
+warehouse.add_product(p2)
+warehouse.add_product(p3)       # количество яблок станет 7
+warehouse.print_table() 
+product = warehouse.find_product("Яблоки")
+if product is not None:
+    print(product.name, product.price, product.quantity)
+else:
+    print("Такого товара на складе нет")
+print(warehouse.total_value())  # 7*10 + 3*15 = 115
+warehouse.remove_product("Яблоки", 4)  # останется 3 яблока
+print(warehouse.total_value())'''
+
+#2  Библиотека книг (композиция + поиск)
+class Book ():
+    def __init__(self,title,author,year,is_available=True):
+        self.title=title
+        self.author=author
+        self.year=year
+        self.is_available=is_available  #можно указвать достцупность книги
+
+class Library:
+    def __init__(self):
+        self.list_of_books={}
+    def add_book(self,book):
+        key = (book.title,book.author, book.year)
+        if key in self.list_of_books:
+            print("Книга с таким названием и годом издания уже есть в библиотеке")
+        else:
+            self.list_of_books[key] = book
+            print(f"Книга {book.title}  добавлена")
+    def find_by_author(self, author):
+        found = []
+        for book in self.list_of_books.values():
+            if book.author == author:
+                found.append(book)
+
+        if found:
+            print(f"Книги автора {author}:")
+            for book in found:
+                print(f"- {book.title} ({book.year})")
+        else:
+            print(f"Книг автора {author} в библиотеке нет")  
+    def borrow(self, title):
+        # ищем книгу по названию
+        for book in self.list_of_books.values():
+            if book.title == title:
+                if book.is_available:
+                    book.is_available = False
+                    print(f"Книга '{title}' выдана посетителю.")
+                else:
+                    print(f"Книга '{title}' сейчас уже выдана.")
+                return  # выходим из метода после нахождения книги
+        # если цикл завершился без return
+        print(f"Книги '{title}' в библиотеке нет")
+
+    def return_book(self, title):
+        for book in self.list_of_books.values():
+            if book.title == title:
+                if not book.is_available:
+                    book.is_available = True
+                    print(f"Книга '{title}' возвращена.")
+                else:
+                    print(f"Книга '{title}' и так числится как доступная.")
+                return
+        print(f"Книги '{title}' в библиотеке нет")
+
+lib = Library()
+
+b1 = Book("Война и мир", "Толстой", 1869)          # is_available=True по умолчанию
+b2 = Book("Преступление и наказание", "Достоевский", 1866, False)  # явно указываем
+b3 = Book("Война и мир", "Толстой", 1869)  # такая же, как b1
+
+lib.add_book(b1)  # добавится
+lib.add_book(b2)  # добавится
+lib.add_book(b3)  # выведет сообщение, что такая книга уже есть
+
+a1=("Толстой")
+lib.find_by_author("Толстой")
+lib.find_by_author("Пушкин")
+lib.borrow("Война и мир")          # выдаст книгу
+lib.borrow("Война и мир")          # скажет, что уже выдана
+lib.return_book("Война и мир")     # вернёт
+lib.return_book("Война и мир")     # скажет, что и так доступна
+lib.borrow("Идиот")                # книги нет в библиотеке
