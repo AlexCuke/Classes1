@@ -52,6 +52,7 @@ class Library:
         return books
 
 books = []
+books1 = []
 filename = "books.csv"
 
 library1 = Library()
